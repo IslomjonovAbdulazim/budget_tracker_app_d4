@@ -45,6 +45,16 @@ class _CreatePageState extends State<CreatePage> {
                     },
                     child: Center(child: Text(isBorrowed ? "Borrow" : "Debt")),
                   ),
+
+                  // Select Date
+
+                  // Phone Number Text Field
+
+                  // Name Text Field
+
+                  // Desc Text Field
+
+                  // Create Button
                 ],
               ),
             ),
