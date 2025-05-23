@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -50,7 +51,8 @@ class _CreatePageState extends State<CreatePage> {
                       }
                       setState(() {});
                     },
-                    child: Center(child: Text(isBorrowed ? "Qarz Bermoq" : "Qarz Olmoq")),
+                    child: Center(
+                        child: Text(isBorrowed ? "Qarz Bermoq" : "Qarz Olmoq")),
                   ),
 
                   // Select Date
@@ -75,6 +77,26 @@ class _CreatePageState extends State<CreatePage> {
                   ),
 
                   // Sum Text Field
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: sumController,
+                    keyboardType: TextInputType.number,
+                    maxLength: 11,
+                    validator: (value) {
+                      if (value == null) return null;
+                      final number = int.tryParse(value);
+                      if (number == null) {
+                        return "To'g'ri Formatda Son Yozing";
+                      }
+                      if (number < 1 || number > 10000000000) {
+                        return "Chegaradan tashqari son";
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Summa",
+                      counter: SizedBox(),
+                    ),
+                  ),
 
                   // Phone Number Text Field
                   SizedBox(height: 10),
@@ -85,7 +107,6 @@ class _CreatePageState extends State<CreatePage> {
                     validator: (value) {
                       if (value == null) return null;
                       final res = mask.unmaskText(value);
-                      if (res.isEmpty) return null;
                       if (res.length != 9) {
                         return "Telefon Raqam Kiriting";
                       }
@@ -100,6 +121,17 @@ class _CreatePageState extends State<CreatePage> {
                   // Desc Text Field
 
                   // Create Button
+                  Spacer(),
+                  CupertinoButton(
+                    color: Colors.yellow,
+                    onPressed: () {
+                      if (key.currentState!.validate()) {
+                        // Save Logic ...
+                        Get.back();
+                      }
+                    },
+                    child: Center(child: Text("Save")),
+                  ),
                 ],
               ),
             ),
