@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CreatePage extends StatefulWidget {
   const CreatePage({super.key});
@@ -18,12 +19,17 @@ class _CreatePageState extends State<CreatePage> {
   bool isBorrowed = true;
   final key = GlobalKey<FormState>();
 
+  final mask = MaskTextInputFormatter(
+    mask: "(##) ###-##-##",
+    filter: {"#": RegExp(r'[0-9]')},
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: isBorrowed ? Colors.green : Colors.red,
-        title: Text(isBorrowed ? "Borrow" : "Debt"),
+        title: Text(isBorrowed ? "Qarz Bermoq" : "Qarz Olmoq"),
       ),
       body: SafeArea(
         child: Padding(
@@ -44,7 +50,7 @@ class _CreatePageState extends State<CreatePage> {
                       }
                       setState(() {});
                     },
-                    child: Center(child: Text(isBorrowed ? "Borrow" : "Debt")),
+                    child: Center(child: Text(isBorrowed ? "Qarz Bermoq" : "Qarz Olmoq")),
                   ),
 
                   // Select Date
@@ -63,12 +69,31 @@ class _CreatePageState extends State<CreatePage> {
                     },
                     child: Center(
                       child: Text(
-                        "Date: ${DateFormat.yMMMMd().format(selectedDate)}",
+                        "Sana: ${DateFormat.yMMMMd().format(selectedDate)}",
                       ),
                     ),
                   ),
 
+                  // Sum Text Field
+
                   // Phone Number Text Field
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: phoneController,
+                    inputFormatters: [mask],
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null) return null;
+                      final res = mask.unmaskText(value);
+                      if (res.isEmpty) return null;
+                      if (res.length != 9) {
+                        return "Telefon Raqam Kiriting";
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Telefon Raqam",
+                    ),
+                  ),
 
                   // Name Text Field
 
