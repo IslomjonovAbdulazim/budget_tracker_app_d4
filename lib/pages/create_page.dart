@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CreatePage extends StatefulWidget {
   const CreatePage({super.key});
@@ -47,6 +48,25 @@ class _CreatePageState extends State<CreatePage> {
                   ),
 
                   // Select Date
+                  SizedBox(height: 10),
+                  CupertinoButton(
+                    color: Colors.yellow,
+                    onPressed: () async {
+                      final result = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime.now().subtract(Duration(days: 100)),
+                        lastDate: DateTime.now().add(Duration(days: 3)),
+                        currentDate: selectedDate,
+                      );
+                      selectedDate = result ?? selectedDate;
+                      setState(() {});
+                    },
+                    child: Center(
+                      child: Text(
+                        "Date: ${DateFormat.yMMMMd().format(selectedDate)}",
+                      ),
+                    ),
+                  ),
 
                   // Phone Number Text Field
 
