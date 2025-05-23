@@ -16,6 +16,7 @@ dependencies:
   get: ^4.7.2
   device_preview: ^1.2.0
   shared_preferences: ^2.5.3
+  mask_text_input_formatter: ^2.9.0
 
 dev_dependencies:
   flutter_test:
