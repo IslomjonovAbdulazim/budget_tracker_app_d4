@@ -10,6 +10,7 @@ class DebtModel {
   late int phoneNumber;
   late DateTime date;
   late DateTime createdAt;
+  late bool isBorrowed;
 
   // constructor
   DebtModel({
@@ -19,6 +20,7 @@ class DebtModel {
     required this.phoneNumber,
     required this.createdAt,
     required this.date,
+    required this.isBorrowed,
   });
 
   // fromJson
@@ -29,17 +31,19 @@ class DebtModel {
     phoneNumber = json["phoneNumber"];
     createdAt = DateTime.parse(json["createdAt"]);
     date = DateTime.parse(json["date"]);
+    isBorrowed = json["isBorrowed"];
   }
 
   // toJson
   Map toJson() => {
-    "sum": sum,
-    "desc": desc,
-    "name": name,
-    "phoneNumber": phoneNumber,
-    "createdAt": createdAt.toIso8601String(),
-    "date": date.toIso8601String(),
-  };
+        "sum": sum,
+        "desc": desc,
+        "name": name,
+        "phoneNumber": phoneNumber,
+        "createdAt": createdAt.toIso8601String(),
+        "date": date.toIso8601String(),
+        "isBorrowed": isBorrowed,
+      };
 }
 
 Future<void> saveAllDebts(List<DebtModel> debts) async {
@@ -54,6 +58,7 @@ Future<List<DebtModel>> getAllDebts() async {
   final data = db.getString("debts") ?? "[]";
   final listJson = List.from(jsonDecode(data));
   final result = listJson.map((json) => DebtModel.fromJson(json)).toList();
+  result.sort((a, b) => b.date.compareTo(a.date));
   return result;
 }
 
@@ -69,17 +74,3 @@ Future<void> createDebt(DebtModel debt) async {
   allDebts.add(debt);
   await saveAllDebts(allDebts);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
