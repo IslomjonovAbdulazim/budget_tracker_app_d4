@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 class DebtModel {
   // members
   late int sum;
@@ -38,9 +42,33 @@ class DebtModel {
   };
 }
 
+Future<void> saveAllDebts(List<DebtModel> debts) async {
+  final db = await SharedPreferences.getInstance();
+  final listJson = debts.map((model) => model.toJson()).toList();
+  final data = jsonEncode(listJson);
+  await db.setString("debts", data);
+}
 
+Future<List<DebtModel>> getAllDebts() async {
+  final db = await SharedPreferences.getInstance();
+  final data = db.getString("debts") ?? "[]";
+  final listJson = List.from(jsonDecode(data));
+  final result = listJson.map((json) => DebtModel.fromJson(json)).toList();
+  return result;
+}
 
+Future<void> deleteDebt(DebtModel debt) async {
+  final allDebts = await getAllDebts();
+  allDebts.removeWhere((model) => model.createdAt == debt.createdAt);
+  await saveAllDebts(allDebts);
+}
 
+Future<void> createDebt(DebtModel debt) async {
+  final allDebts = await getAllDebts();
+  allDebts.removeWhere((model) => model.createdAt == debt.createdAt);
+  allDebts.add(debt);
+  await saveAllDebts(allDebts);
+}
 
 
 
