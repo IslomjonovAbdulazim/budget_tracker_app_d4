@@ -26,6 +26,16 @@ class DebtModel {
     createdAt = DateTime.parse(json["createdAt"]);
     date = DateTime.parse(json["date"]);
   }
+
+  // toJson
+  Map toJson() => {
+    "sum": sum,
+    "desc": desc,
+    "name": name,
+    "phoneNumber": phoneNumber,
+    "createdAt": createdAt.toIso8601String(),
+    "date": date.toIso8601String(),
+  };
 }
 
 
