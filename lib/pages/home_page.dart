@@ -70,9 +70,19 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Expanded(
                       child: LinearProgressIndicator(
-                        value: .4,
+                        value: 0.4,
                         backgroundColor: Colors.red.shade100,
                         color: Colors.red.shade800,
+                        minHeight: 60,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: 0.4,
+                        backgroundColor: Colors.green.shade100,
+                        color: Colors.green.shade800,
                         minHeight: 60,
                         borderRadius: BorderRadius.circular(12),
                       ),
