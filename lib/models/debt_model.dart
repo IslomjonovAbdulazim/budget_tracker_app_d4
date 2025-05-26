@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DebtModel {
   // members
   late int sum;
+  late int left;
   late String desc;
   late String name;
   late int phoneNumber;
@@ -15,6 +16,7 @@ class DebtModel {
   // constructor
   DebtModel({
     required this.sum,
+    this.left = 0,
     required this.desc,
     required this.name,
     required this.phoneNumber,
@@ -26,6 +28,7 @@ class DebtModel {
   // fromJson
   DebtModel.fromJson(Map json) {
     sum = json["sum"];
+    left = json["left"] ?? 0;
     desc = json["desc"];
     name = json["name"];
     phoneNumber = json["phoneNumber"];
@@ -37,6 +40,7 @@ class DebtModel {
   // toJson
   Map toJson() => {
         "sum": sum,
+        "left": left,
         "desc": desc,
         "name": name,
         "phoneNumber": phoneNumber,
