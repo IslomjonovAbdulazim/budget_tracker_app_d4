@@ -28,9 +28,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void load() async {
-    final db = await SharedPreferences.getInstance();
-    await db.clear();
-
     debts = await getAllDebts();
     totalDebt = 0;
     paidDebt = 0;
