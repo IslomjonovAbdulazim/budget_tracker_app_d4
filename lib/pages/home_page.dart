@@ -64,7 +64,26 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               // Summary...
+              SizedBox(
+                height: 60,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: .4,
+                        backgroundColor: Colors.red.shade100,
+                        color: Colors.red.shade800,
+                        minHeight: 60,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
+              SizedBox(height: 10),
+              Divider(),
+              SizedBox(height: 10),
               // All Debts
               Expanded(
                 child: ListView.builder(
