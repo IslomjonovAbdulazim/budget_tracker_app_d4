@@ -1,3 +1,4 @@
+import 'package:budget_tracker_app_d4/models/debt_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,9 @@ class _CreatePageState extends State<CreatePage> {
   final descController = TextEditingController();
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
+  final sumFocus = FocusNode();
+  final nameFocus = FocusNode();
+  final phoneFocus = FocusNode();
   DateTime selectedDate = DateTime.now();
   bool isBorrowed = true;
   final key = GlobalKey<FormState>();
@@ -28,6 +32,7 @@ class _CreatePageState extends State<CreatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: isBorrowed ? Colors.green : Colors.red,
         title: Text(isBorrowed ? "Qarz Bermoq" : "Qarz Olmoq"),
@@ -80,8 +85,11 @@ class _CreatePageState extends State<CreatePage> {
                   SizedBox(height: 10),
                   TextFormField(
                     controller: sumController,
+                    focusNode: sumFocus,
+                    autofocus: true,
                     keyboardType: TextInputType.number,
                     maxLength: 11,
+                    onTapOutside: (value) => sumFocus.unfocus(),
                     validator: (value) {
                       if (value == null) return null;
                       final number = int.tryParse(value);
@@ -102,8 +110,10 @@ class _CreatePageState extends State<CreatePage> {
                   SizedBox(height: 10),
                   TextFormField(
                     controller: phoneController,
+                    focusNode: phoneFocus,
                     inputFormatters: [mask],
                     keyboardType: TextInputType.number,
+                    onTapOutside: (value) => phoneFocus.unfocus(),
                     validator: (value) {
                       if (value == null) return null;
                       final res = mask.unmaskText(value);
@@ -117,16 +127,42 @@ class _CreatePageState extends State<CreatePage> {
                   ),
 
                   // Name Text Field
-
-                  // Desc Text Field
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: nameController,
+                    focusNode: nameFocus,
+                    onTapOutside: (value) => nameFocus.unfocus(),
+                    validator: (value) {
+                      if (value == null) return null;
+                      if (value.trim().length < 2) {
+                        return "Izoh kiritilsin";
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Izoh",
+                    ),
+                  ),
 
                   // Create Button
                   Spacer(),
                   CupertinoButton(
                     color: Colors.yellow,
-                    onPressed: () {
+                    onPressed: () async {
                       if (key.currentState!.validate()) {
-                        // Save Logic ...
+                        final sum = sumController.text.trim();
+                        final phone = phoneController.text.trim();
+                        final name = nameController.text.trim();
+                        final phoneInt = int.tryParse(mask.unmaskText(phone)) ?? 0;
+                        final model = DebtModel(
+                          sum: int.tryParse(sum) ?? 0,
+                          desc: "",
+                          name: name,
+                          phoneNumber: phoneInt,
+                          createdAt: DateTime.now(),
+                          date: selectedDate,
+                          isBorrowed: isBorrowed,
+                        );
+                        await createDebt(model);
                         Get.back();
                       }
                     },
