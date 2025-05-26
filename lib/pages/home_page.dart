@@ -14,6 +14,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<DebtModel> debts = [];
+  var totalDebt = 0;
+  var paidDebt = 0;
+  var totalLand = 0;
+  var paidLand = 0;
 
   @override
   void initState() {
@@ -23,6 +27,11 @@ class _HomePageState extends State<HomePage> {
 
   void load() async {
     debts = await getAllDebts();
+    totalDebt = 0;
+    paidDebt = 0;
+    totalLand = 0;
+    paidLand = 0;
+    for (final model in debts) {}
     setState(() {});
   }
 
