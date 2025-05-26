@@ -16,14 +16,18 @@ class DebtModel {
   // constructor
   DebtModel({
     required this.sum,
-    this.left = 0,
+    this.left = -1,
     required this.desc,
     required this.name,
     required this.phoneNumber,
     required this.createdAt,
     required this.date,
     required this.isBorrowed,
-  });
+  }) {
+    if (left == -1) {
+      left = sum;
+    }
+  }
 
   // fromJson
   DebtModel.fromJson(Map json) {

@@ -3,6 +3,7 @@ import 'package:budget_tracker_app_d4/pages/create_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +28,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void load() async {
+    final db = await SharedPreferences.getInstance();
+    await db.clear();
+
     debts = await getAllDebts();
     totalDebt = 0;
     paidDebt = 0;
@@ -40,6 +44,16 @@ class _HomePageState extends State<HomePage> {
         totalDebt += model.sum;
         paidDebt += (model.sum - model.left);
       }
+    }
+    if (totalDebt > 0) {
+      debtPercentage = paidDebt / totalDebt;
+    } else {
+      debtPercentage = 1;
+    }
+    if (totalLand > 0) {
+      landPercentage = paidLand / totalLand;
+    } else {
+      landPercentage = 1;
     }
     setState(() {});
   }
@@ -72,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Expanded(
                       child: LinearProgressIndicator(
-                        value: 0.4,
+                        value: debtPercentage,
                         backgroundColor: Colors.red.shade100,
                         color: Colors.red.shade800,
                         minHeight: 60,
@@ -82,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(width: 10),
                     Expanded(
                       child: LinearProgressIndicator(
-                        value: 0.4,
+                        value: landPercentage,
                         backgroundColor: Colors.green.shade100,
                         color: Colors.green.shade800,
                         minHeight: 60,
