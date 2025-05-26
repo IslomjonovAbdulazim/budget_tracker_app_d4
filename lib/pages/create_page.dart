@@ -20,7 +20,7 @@ class _CreatePageState extends State<CreatePage> {
   final sumFocus = FocusNode();
   final nameFocus = FocusNode();
   final phoneFocus = FocusNode();
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now().add(Duration(days: 30));
   bool isBorrowed = true;
   final key = GlobalKey<FormState>();
 
@@ -67,16 +67,17 @@ class _CreatePageState extends State<CreatePage> {
                     onPressed: () async {
                       final result = await showDatePicker(
                         context: context,
-                        firstDate: DateTime.now().subtract(Duration(days: 100)),
-                        lastDate: DateTime.now().add(Duration(days: 3)),
+                        firstDate: DateTime.now().subtract(Duration(days: 3)),
+                        lastDate: DateTime.now().add(Duration(days: 1000)),
                         currentDate: selectedDate,
+                        barrierColor: Colors.black.withOpacity(0.8),
                       );
                       selectedDate = result ?? selectedDate;
                       setState(() {});
                     },
                     child: Center(
                       child: Text(
-                        "Sana: ${DateFormat.yMMMMd().format(selectedDate)}",
+                        "Muhlat: ${DateFormat.yMMMMd().format(selectedDate)}",
                       ),
                     ),
                   ),
