@@ -3,7 +3,7 @@ import 'package:budget_tracker_app_d4/pages/create_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -59,6 +59,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        title: Text("Oldi Berdi"),
         actions: [
           CupertinoButton(
             padding: EdgeInsets.zero,
@@ -113,10 +115,24 @@ class _HomePageState extends State<HomePage> {
                   itemCount: debts.length,
                   itemBuilder: (context, index) {
                     final model = debts[index];
+                    final deadline =
+                        model.date.difference(model.createdAt).inHours;
+                    final spent =
+                        DateTime.now().difference(model.createdAt).inHours;
+                    var datePercentage = 1.0;
+                    if (deadline > 0 && spent >= 0) {
+                      datePercentage = spent / deadline;
+                    }
+                    var sumPercentage = 1.0;
+                    if (model.sum > 0) {
+                      sumPercentage = (model.sum - model.left) / model.sum;
+                    }
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: CupertinoButton(
-                        color: Colors.yellow,
+                        color: model.isBorrowed
+                            ? Colors.green.shade50
+                            : Colors.red.shade50,
                         onPressed: () {},
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,13 +143,101 @@ class _HomePageState extends State<HomePage> {
                                   child: Text(
                                     model.name,
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: model.isBorrowed
+                                          ? Colors.green.shade800
+                                          : Colors.red.shade800,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],
+                            ),
+                            // date
+                            SizedBox(height: 5),
+                            SizedBox(
+                              height: 20,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    DateFormat.yMMMd().format(model.createdAt),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Expanded(
+                                    child: LinearProgressIndicator(
+                                      value: datePercentage,
+                                      color: model.isBorrowed
+                                          ? Colors.green.shade800
+                                          : Colors.red.shade800,
+                                      backgroundColor: model.isBorrowed
+                                          ? Colors.green.shade100
+                                          : Colors.red.shade100,
+                                      minHeight: 10,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    DateFormat.yMMMd().format(model.date),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            // sum
+                            SizedBox(height: 5),
+                            Divider(
+                              color: model.isBorrowed
+                                  ? Colors.green.shade300
+                                  : Colors.red.shade300,
+                              thickness: 0.5,
+                            ),
+                            SizedBox(height: 5),
+                            SizedBox(
+                              height: 20,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    model.left.toString(),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Expanded(
+                                    child: LinearProgressIndicator(
+                                      value: sumPercentage,
+                                      color: model.isBorrowed
+                                          ? Colors.green.shade800
+                                          : Colors.red.shade800,
+                                      backgroundColor: model.isBorrowed
+                                          ? Colors.green.shade100
+                                          : Colors.red.shade100,
+                                      minHeight: 10,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    model.sum.toString(),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
