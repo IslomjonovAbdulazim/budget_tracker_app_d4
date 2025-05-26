@@ -3,7 +3,6 @@ import 'package:budget_tracker_app_d4/pages/create_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -31,7 +30,15 @@ class _HomePageState extends State<HomePage> {
     paidDebt = 0;
     totalLand = 0;
     paidLand = 0;
-    for (final model in debts) {}
+    for (final model in debts) {
+      if (model.isBorrowed) {
+        totalLand += model.sum;
+        paidLand += (model.sum - model.left);
+      } else {
+        totalDebt += model.sum;
+        paidDebt += (model.sum - model.left);
+      }
+    }
     setState(() {});
   }
 
