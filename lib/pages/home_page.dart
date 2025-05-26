@@ -17,6 +17,8 @@ class _HomePageState extends State<HomePage> {
   var paidDebt = 0;
   var totalLand = 0;
   var paidLand = 0;
+  var debtPercentage = 0.0;
+  var landPercentage = 0.0;
 
   @override
   void initState() {
