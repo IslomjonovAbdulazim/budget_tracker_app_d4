@@ -1,5 +1,6 @@
 import 'package:budget_tracker_app_d4/models/debt_model.dart';
 import 'package:budget_tracker_app_d4/pages/create_page.dart';
+import 'package:budget_tracker_app_d4/pages/detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -133,7 +134,10 @@ class _HomePageState extends State<HomePage> {
                         color: model.isBorrowed
                             ? Colors.green.shade50
                             : Colors.red.shade50,
-                        onPressed: () {},
+                        onPressed: () async {
+                          await Get.to(DetailPage(debt: model));
+                          load();
+                        },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -208,7 +212,8 @@ class _HomePageState extends State<HomePage> {
                               child: Row(
                                 children: [
                                   Text(
-                                    model.left.toString(),
+                                    NumberFormat.decimalPattern()
+                                        .format(model.sum - model.left),
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 12,
@@ -230,7 +235,8 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   SizedBox(width: 5),
                                   Text(
-                                    model.sum.toString(),
+                                    NumberFormat.decimalPattern()
+                                        .format(model.sum),
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 12,

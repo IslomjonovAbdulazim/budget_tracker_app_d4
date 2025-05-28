@@ -60,15 +60,3 @@ Future<void> addNewPayment(PaymentModel payment, DebtModel debt) async {
   debt.left -= payment.payment;
   await saveAllDebts(allDebts);
 }
-
-
-
-
-
-
-
-
-
-
-
-
