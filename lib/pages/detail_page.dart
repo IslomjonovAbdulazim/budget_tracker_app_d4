@@ -256,11 +256,30 @@ class _DetailPageState extends State<DetailPage> {
                     itemCount: payments.length,
                     itemBuilder: (context, index) {
                       final model = payments[index];
-                      return CupertinoButton(
-                        onPressed: () {},
-                        child: ListTile(
-                          title: Text(
-                            NumberFormat.decimalPattern().format(model.payment),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: CupertinoButton(
+                          color: widget.debt.isBorrowed
+                              ? Colors.green.shade100
+                              : Colors.red.shade100,
+                          padding: EdgeInsets.zero,
+                          onPressed: () {},
+                          child: ListTile(
+                            title: Text(
+                              NumberFormat.decimalPattern()
+                                  .format(model.payment),
+                            ),
+                            subtitle: Row(
+                              children: [
+                                Text(
+                                  DateFormat.yMMMMd().format(model.date),
+                                ),
+                                Text(" at "),
+                                Text(
+                                  DateFormat.Hm().format(model.date),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
