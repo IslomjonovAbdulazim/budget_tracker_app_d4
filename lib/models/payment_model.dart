@@ -39,6 +39,7 @@ Future<List<PaymentModel>> getAllPayments() async {
   final data = db.getString("payments") ?? "[]";
   final listJson = List.from(jsonDecode(data));
   final result = listJson.map((json) => PaymentModel.fromJson(json)).toList();
+  result.sort((a, b) => b.date.compareTo(a.date));
   return result;
 }
 
@@ -48,6 +49,7 @@ Future<void> saveAllPayments(List<PaymentModel> payments) async {
   final data = jsonEncode(listJson);
   await db.setString("payments", data);
 }
+
 
 
 
