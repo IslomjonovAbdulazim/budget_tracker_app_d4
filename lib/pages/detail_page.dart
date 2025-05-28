@@ -225,7 +225,21 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                               SizedBox(height: 10),
                               CupertinoButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  if (key.currentState!.validate()) {
+                                    final txt = noteController.text.trim();
+                                    int sum = int.tryParse(txt) ?? 0;
+                                    final model = PaymentModel(
+                                      payment: sum,
+                                      debtId: widget.debt.createdAt,
+                                      note: "h/w",
+                                      date: DateTime.now(),
+                                    );
+                                    await addNewPayment(model, widget.debt);
+                                    Get.back();
+                                    Get.back();
+                                  }
+                                },
                                 child: Text("Save"),
                               ),
                             ],
