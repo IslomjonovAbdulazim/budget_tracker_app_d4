@@ -193,63 +193,70 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 Divider(),
                 SizedBox(height: 10),
-                CupertinoButton(
-                  color: Colors.yellow,
-                  onPressed: () async {
-                    final res = await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        content: Form(
-                          key: key,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextFormField(
-                                controller: noteController,
-                                focusNode: noteFocus,
-                                onTapOutside: (value) => noteFocus.unfocus(),
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null) return null;
-                                  final num = int.tryParse(value);
-                                  if (num == null) {
-                                    return "Noto'g'ri formatdagi son";
-                                  }
-                                  if (num <= 0 || num > widget.debt.left) {
-                                    return "0 dan katta va ${widget.debt.left} dan kichik";
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  labelText: "Summa (max:${widget.debt.left})",
+                widget.debt.left == 0
+                    ? SizedBox()
+                    : CupertinoButton(
+                        color: Colors.yellow,
+                        onPressed: () async {
+                          final res = await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              content: Form(
+                                key: key,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TextFormField(
+                                      controller: noteController,
+                                      focusNode: noteFocus,
+                                      onTapOutside: (value) =>
+                                          noteFocus.unfocus(),
+                                      keyboardType: TextInputType.number,
+                                      validator: (value) {
+                                        if (value == null) return null;
+                                        final num = int.tryParse(value);
+                                        if (num == null) {
+                                          return "Noto'g'ri formatdagi son";
+                                        }
+                                        if (num <= 0 ||
+                                            num > widget.debt.left) {
+                                          return "0 dan katta va ${widget.debt.left} dan kichik";
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText:
+                                            "Summa (max:${widget.debt.left})",
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    CupertinoButton(
+                                      onPressed: () async {
+                                        if (key.currentState!.validate()) {
+                                          final txt =
+                                              noteController.text.trim();
+                                          int sum = int.tryParse(txt) ?? 0;
+                                          final model = PaymentModel(
+                                            payment: sum,
+                                            debtId: widget.debt.createdAt,
+                                            note: "h/w",
+                                            date: DateTime.now(),
+                                          );
+                                          await addNewPayment(
+                                              model, widget.debt);
+                                          Get.back();
+                                          Get.back();
+                                        }
+                                      },
+                                      child: Text("Save"),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              SizedBox(height: 10),
-                              CupertinoButton(
-                                onPressed: () async {
-                                  if (key.currentState!.validate()) {
-                                    final txt = noteController.text.trim();
-                                    int sum = int.tryParse(txt) ?? 0;
-                                    final model = PaymentModel(
-                                      payment: sum,
-                                      debtId: widget.debt.createdAt,
-                                      note: "h/w",
-                                      date: DateTime.now(),
-                                    );
-                                    await addNewPayment(model, widget.debt);
-                                    Get.back();
-                                    Get.back();
-                                  }
-                                },
-                                child: Text("Save"),
-                              ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
+                        child: Center(child: Text("New Payment")),
                       ),
-                    );
-                  },
-                  child: Center(child: Text("New Payment")),
-                ),
                 SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
