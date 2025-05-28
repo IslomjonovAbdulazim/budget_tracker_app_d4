@@ -1,3 +1,4 @@
+import 'package:budget_tracker_app_d4/models/payment_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,24 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  final key = GlobalKey<FormState>();
+  final noteController = TextEditingController();
+  final sumController = TextEditingController();
+  final noteFocus = FocusNode();
+  final sumFocus = FocusNode();
+  List<PaymentModel> payments = [];
+
+  @override
+  void initState() {
+    load();
+    super.initState();
+  }
+
+  void load() async {
+    payments = await getAllPayments();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final deadline = widget.debt.date.difference(widget.debt.createdAt).inHours;
@@ -61,7 +80,6 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-
                 // Date
                 SizedBox(height: 8),
                 SizedBox(
@@ -146,6 +164,8 @@ class _DetailPageState extends State<DetailPage> {
                     ],
                   ),
                 ),
+
+
               ],
             ),
           ),
