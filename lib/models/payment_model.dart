@@ -23,7 +23,7 @@ class PaymentModel {
     payment = json["payment"];
     debtId = DateTime.parse(json["debtId"]);
     note = json["note"];
-    date = DateTime.parse(json["debt"]);
+    date = DateTime.tryParse(json["date"]) ?? DateTime.now();
   }
 
   // toJson
@@ -58,5 +58,7 @@ Future<void> addNewPayment(PaymentModel payment, DebtModel debt) async {
   allPayments.add(payment);
   await saveAllPayments(allPayments);
   debt.left -= payment.payment;
+  allDebts.removeWhere((model) => model.createdAt == debt.createdAt);
+  allDebts.add(debt);
   await saveAllDebts(allDebts);
 }

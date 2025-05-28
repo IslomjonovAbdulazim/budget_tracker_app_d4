@@ -250,6 +250,23 @@ class _DetailPageState extends State<DetailPage> {
                   },
                   child: Center(child: Text("New Payment")),
                 ),
+                SizedBox(height: 10),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: payments.length,
+                    itemBuilder: (context, index) {
+                      final model = payments[index];
+                      return CupertinoButton(
+                        onPressed: () {},
+                        child: ListTile(
+                          title: Text(
+                            NumberFormat.decimalPattern().format(model.payment),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
