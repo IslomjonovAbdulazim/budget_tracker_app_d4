@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/debt_model.dart';
 
@@ -22,6 +24,12 @@ class _DetailPageState extends State<DetailPage> {
   final noteFocus = FocusNode();
   final sumFocus = FocusNode();
   List<PaymentModel> payments = [];
+  final mask = MaskTextInputFormatter(
+    mask: "(##) ###-##-##",
+    filter: {
+      "#": RegExp(r'[0-9]'),
+    },
+  );
 
   @override
   void initState() {
@@ -165,7 +173,24 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                 ),
 
-
+                CupertinoButton(
+                  onPressed: () async {
+                    final uri = Uri(
+                      scheme: "tel",
+                      path: widget.debt.phoneNumber.toString(),
+                    );
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri);
+                    } else {
+                      print("Uzur, ochib bolmadi");
+                    }
+                  },
+                  child: Text(
+                    mask.maskText(
+                      widget.debt.phoneNumber.toString(),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
