@@ -191,6 +191,51 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                   ),
                 ),
+                Divider(),
+                SizedBox(height: 10),
+                CupertinoButton(
+                  color: Colors.yellow,
+                  onPressed: () async {
+                    final res = await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: Form(
+                          key: key,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextFormField(
+                                controller: noteController,
+                                focusNode: noteFocus,
+                                onTapOutside: (value) => noteFocus.unfocus(),
+                                keyboardType: TextInputType.number,
+                                validator: (value) {
+                                  if (value == null) return null;
+                                  final num = int.tryParse(value);
+                                  if (num == null) {
+                                    return "Noto'g'ri formatdagi son";
+                                  }
+                                  if (num <= 0 || num > widget.debt.left) {
+                                    return "0 dan katta va ${widget.debt.left} dan kichik";
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                  labelText: "Summa (max:${widget.debt.left})",
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              CupertinoButton(
+                                onPressed: () {},
+                                child: Text("Save"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Center(child: Text("New Payment")),
+                ),
               ],
             ),
           ),
