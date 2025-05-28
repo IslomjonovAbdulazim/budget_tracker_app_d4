@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:budget_tracker_app_d4/models/debt_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentModel {
@@ -50,15 +51,15 @@ Future<void> saveAllPayments(List<PaymentModel> payments) async {
   await db.setString("payments", data);
 }
 
-
-
-
-
-
-
-
-
-
+Future<void> addNewPayment(PaymentModel payment, DebtModel debt) async {
+  final allDebts = await getAllDebts();
+  final allPayments = await getAllPayments();
+  allPayments.removeWhere((model) => model.date == payment.date);
+  allPayments.add(payment);
+  await saveAllPayments(allPayments);
+  debt.left -= payment.payment;
+  await saveAllDebts(allDebts);
+}
 
 
 
